@@ -143,7 +143,6 @@ input {
     margin-top: 15px;
     font-size: 0.9rem;
 }
-    {
 </style>
 
 </head>
@@ -216,8 +215,9 @@ upload.addEventListener("change", () => {
             const card = document.createElement("div");
             card.className = "card";
 
-            const text = overlayTexts[index];
-            const story = stories[index % stories.length];
+          const text = overlayTexts[index] || "Our Love Story 💖";
+          const story = stories[index] || stories[stories.length - 1];
+
 
             card.innerHTML = `
                 <img src="${e.target.result}">
