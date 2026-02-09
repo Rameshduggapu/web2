@@ -16,4 +16,203 @@
 
 body {
     margin: 0;
-    font-
+    font-family: 'Playfair Display', serif;
+    background: var(--primary-bg);
+    min-height: 100vh;
+    overflow-x: hidden;
+}
+
+/* Floating hearts animation */
+.heart {
+    position: fixed;
+    top: -10px;
+    font-size: 20px;
+    color: rgba(255,255,255,0.8);
+    animation: fall linear forwards;
+}
+
+@keyframes fall {
+    to {
+        transform: translateY(110vh) rotate(360deg);
+        opacity: 0;
+    }
+}
+
+/* Layout */
+.container {
+    padding: 80px 5%;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 30px;
+}
+
+/* Fancy cards */
+.card {
+    position: relative;
+    height: 420px;
+    border-radius: 20px;
+    overflow: hidden;
+    backdrop-filter: blur(8px);
+    box-shadow: 0 20px 40px rgba(0,0,0,0.25);
+    transform: translateY(0);
+    transition: transform 0.4s ease;
+}
+
+.card:hover {
+    transform: translateY(-10px);
+}
+
+.card img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* Overlay */
+.overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+        to top,
+        rgba(0,0,0,0.65),
+        rgba(0,0,0,0.25)
+    );
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 30px;
+}
+
+.overlay p {
+    color: #fff;
+    font-size: 1.8rem;
+    line-height: 1.5;
+    font-weight: 600;
+    text-shadow: 0 0 15px rgba(255,192,203,0.7);
+    animation: fadeUp 1.2s ease forwards, heartbeatFloat 3s infinite;
+}
+
+/* Fade animation */
+@keyframes fadeUp {
+    from {
+        opacity: 0;
+        transform: translateY(25px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Heartbeat + gentle float animation */
+@keyframes heartbeatFloat {
+    0%, 100% {
+        transform: translateY(0) scale(1);
+    }
+    20% {
+        transform: translateY(-5px) scale(1.05);
+    }
+    40% {
+        transform: translateY(0) scale(1.1);
+    }
+    60% {
+        transform: translateY(-5px) scale(1.05);
+    }
+    80% {
+        transform: translateY(0) scale(1);
+    }
+}
+
+/* Header */
+header {
+    text-align: center;
+    padding-top: 50px;
+    color: #fff;
+}
+
+header h1 {
+    font-size: 3rem;
+    margin-bottom: 10px;
+}
+
+header span {
+    font-size: 1.2rem;
+    opacity: 0.9;
+}
+
+</style>
+</head>
+
+<body>
+
+<header>
+    <h1>Our Love Story</h1>
+    <span>Every heartbeat leads back to you 💞</span>
+</header>
+
+<!-- Image Upload -->
+<div style="text-align:center; margin:30px 0;">
+    <input type="file" id="imageUpload" accept="image/*" multiple>
+</div>
+
+<!-- Gallery -->
+<div class="container" id="gallery">
+</div>
+
+<!-- Scripts -->
+<script>
+// Falling hearts animation
+function createHeart() {
+    const heart = document.createElement("div");
+    heart.classList.add("heart");
+    heart.innerHTML = "❤";
+    heart.style.left = Math.random() * 100 + "vw";
+    heart.style.fontSize = (14 + Math.random() * 20) + "px";
+    heart.style.animationDuration = (3 + Math.random() * 5) + "s";
+    document.body.appendChild(heart);
+    setTimeout(() => heart.remove(), 8000);
+}
+setInterval(createHeart, 300);
+
+// Image upload with Option B romantic text
+const uploadInput = document.getElementById("imageUpload");
+const gallery = document.getElementById("gallery");
+
+const loveTexts = [
+    "You & Me<br>Always and Forever ❤️",
+    "Two hearts<br>One beautiful story 💕",
+    "Every picture<br>Holds a heartbeat",
+    "Together<br>Is my favorite place",
+    "Forever<br>Starts with you"
+];
+
+uploadInput.addEventListener("change", function () {
+    // Remove existing cards
+    gallery.innerHTML = "";
+
+    Array.from(this.files).forEach(file => {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            const card = document.createElement("div");
+            card.className = "card";
+
+            // Pick a random romantic text
+            const randomText = loveTexts[Math.floor(Math.random() * loveTexts.length)];
+
+            card.innerHTML = `
+                <img src="${e.target.result}">
+                <div class="overlay">
+                    <p>${randomText}</p>
+                </div>
+            `;
+            gallery.appendChild(card);
+        };
+        reader.readAsDataURL(file);
+    });
+});
+</script>
+
+</body>
+</html>
