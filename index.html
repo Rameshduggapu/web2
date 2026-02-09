@@ -173,15 +173,15 @@ const gallery = document.getElementById("gallery");
 upload.addEventListener("change", () => {
     gallery.innerHTML = "";
 
-    [...upload.files].forEach(file => {
+    [...upload.files].forEach((file, index) => {
         const reader = new FileReader();
 
         reader.onload = e => {
             const card = document.createElement("div");
             card.className = "card";
 
-            const text = overlayTexts[Math.floor(Math.random() * overlayTexts.length)];
-            const story = stories[Math.floor(Math.random() * stories.length)];
+            const text = overlayTexts[index % overlayTexts.length];
+            const story = stories[index % stories.length];
 
             card.innerHTML = `
                 <img src="${e.target.result}">
@@ -199,6 +199,7 @@ upload.addEventListener("change", () => {
         reader.readAsDataURL(file);
     });
 });
+
 
 // Close modal
 document.getElementById("loveModal").onclick = () => {
