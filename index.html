@@ -7,90 +7,64 @@
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700&display=swap" rel="stylesheet">
 
 <style>
-:root {
-    --primary-bg: linear-gradient(135deg, #ff758c, #ff7eb3);
-}
-
-* {
-    box-sizing: border-box;
-}
-
 body {
     margin: 0;
     font-family: 'Playfair Display', serif;
-    background: var(--primary-bg);
+    background: linear-gradient(135deg, #ff758c, #ff7eb3);
     min-height: 100vh;
     overflow-x: hidden;
+    color: white;
 }
 
-/* Floating hearts */
+header {
+    text-align: center;
+    padding: 40px 20px;
+}
+
+header h1 {
+    font-size: 3rem;
+}
+
+header span {
+    font-size: 1.2rem;
+}
+
+/* Upload */
+input {
+    padding: 10px;
+}
+
+/* Hearts */
 .heart {
     position: fixed;
     top: -10px;
-    font-size: 20px;
-    color: rgba(255,255,255,0.8);
+    font-size: 18px;
     animation: fall linear forwards;
     pointer-events: none;
 }
 
 @keyframes fall {
     to {
-        transform: translateY(110vh) rotate(360deg);
+        transform: translateY(110vh);
         opacity: 0;
     }
 }
 
-/* Header */
-header {
-    text-align: center;
-    padding-top: 50px;
-    color: #fff;
-}
-
-header h1 {
-    font-size: 3rem;
-    margin-bottom: 10px;
-}
-
-header span {
-    font-size: 1.2rem;
-    opacity: 0.9;
-}
-
-/* Layout */
+/* Gallery */
 .container {
-    padding: 80px 5%;
+    padding: 40px;
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 30px;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 25px;
 }
 
-/* Card */
 .card {
     position: relative;
-    height: 420px;
+    height: 380px;
     border-radius: 20px;
     overflow: hidden;
-    backdrop-filter: blur(8px);
-    box-shadow: 0 20px 40px rgba(0,0,0,0.25);
     cursor: pointer;
-    animation: cardFade 0.8s ease forwards;
-}
-
-@keyframes cardFade {
-    from {
-        opacity: 0;
-        transform: translateY(20px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-.card:hover {
-    transform: translateY(-10px);
-    transition: transform 0.4s ease;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.3);
 }
 
 .card img {
@@ -103,35 +77,16 @@ header span {
 .overlay {
     position: absolute;
     inset: 0;
-    background: linear-gradient(
-        to top,
-        rgba(0,0,0,0.65),
-        rgba(0,0,0,0.25)
-    );
+    background: rgba(0,0,0,0.45);
     display: flex;
     align-items: center;
     justify-content: center;
     text-align: center;
-    padding: 30px;
+    padding: 20px;
 }
 
 .overlay p {
-    color: #fff;
-    font-size: 1.8rem;
-    font-weight: 600;
-    line-height: 1.5;
-    text-shadow: 0 0 15px rgba(255,192,203,0.7);
-    animation: fadeUp 1.2s ease forwards, heartbeatFloat 3s infinite;
-}
-
-@keyframes fadeUp {
-    from { opacity: 0; transform: translateY(25px); }
-    to { opacity: 1; transform: translateY(0); }
-}
-
-@keyframes heartbeatFloat {
-    0%,100% { transform: scale(1); }
-    40% { transform: scale(1.1); }
+    font-size: 1.6rem;
 }
 
 /* Modal */
@@ -142,27 +97,21 @@ header span {
     display: none;
     align-items: center;
     justify-content: center;
-    z-index: 999;
+    z-index: 1000;
 }
 
 .loveContent {
-    background: linear-gradient(135deg, #ff9a9e, #fad0c4);
-    padding: 40px;
-    border-radius: 25px;
-    max-width: 520px;
-    text-align: center;
+    background: #ffd1dc;
     color: #4b1c2d;
-    font-size: 1.3rem;
-    line-height: 1.7;
-    box-shadow: 0 30px 60px rgba(0,0,0,0.4);
-    animation: fadeUp 0.6s ease;
+    padding: 35px;
+    border-radius: 20px;
+    max-width: 480px;
+    text-align: center;
 }
 
 .closeHint {
-    margin-top: 20px;
-    display: block;
+    margin-top: 15px;
     font-size: 0.9rem;
-    opacity: 0.8;
 }
 </style>
 </head>
@@ -174,72 +123,69 @@ header span {
     <span>Every heartbeat leads back to you 💞</span>
 </header>
 
-<div style="text-align:center; margin:30px 0;">
+<div style="text-align:center;">
     <input type="file" id="imageUpload" accept="image/*" multiple>
 </div>
 
 <div class="container" id="gallery"></div>
 
-<!-- Romantic Modal -->
+<!-- Modal -->
 <div id="loveModal">
-    <div class="loveContent">
+    <div class="loveContent" onclick="event.stopPropagation()">
         <p id="loveText"></p>
-        <span class="closeHint">Tap anywhere to close 💖</span>
+        <span class="closeHint">Click outside to close 💖</span>
     </div>
 </div>
 
 <script>
 // Floating hearts
-function createHeart() {
+setInterval(() => {
     const heart = document.createElement("div");
     heart.className = "heart";
     heart.innerHTML = "❤";
     heart.style.left = Math.random() * 100 + "vw";
     heart.style.fontSize = (14 + Math.random() * 20) + "px";
-    heart.style.animationDuration = (3 + Math.random() * 5) + "s";
+    heart.style.animationDuration = (4 + Math.random() * 4) + "s";
     document.body.appendChild(heart);
     setTimeout(() => heart.remove(), 8000);
-}
-setInterval(createHeart, 300);
+}, 400);
 
 // Texts
-const loveTexts = [
-    "You & Me<br>Always and Forever ❤️",
-    "Two hearts<br>One beautiful story 💕",
-    "Together<br>Is my favorite place",
-    "Every picture<br>Holds a heartbeat",
-    "Forever<br>Starts with you"
+const overlayTexts = [
+    "You & Me ❤️",
+    "Forever Together 💕",
+    "My Favorite Place Is You",
+    "Love That Never Ends",
+    "Always & Forever"
 ];
 
-const coupleStories = [
-    "In every smile, they found home. In every silence, they found understanding. Together, they became a love story written in heartbeats.",
-    "They didn’t just fall in love — they chose each other every day, turning moments into memories and dreams into forever.",
-    "Two souls met, and the universe smiled. What began as a glance slowly became a lifetime of warmth and trust.",
-    "Through every storm and every sunrise, their hands stayed intertwined — a promise written by destiny itself.",
-    "They are proof that when hearts align, even time pauses to admire love."
+const stories = [
+    "They found love in the simplest moments and turned them into forever memories.",
+    "Two hearts, one journey, and a lifetime of choosing each other.",
+    "Their love didn’t need perfection — it only needed truth.",
+    "Every smile, every silence, every heartbeat brought them closer.",
+    "They became each other’s home in a world full of noise."
 ];
 
-// Image upload + click popup
-const uploadInput = document.getElementById("imageUpload");
+const upload = document.getElementById("imageUpload");
 const gallery = document.getElementById("gallery");
 
-uploadInput.addEventListener("change", function () {
+upload.addEventListener("change", () => {
     gallery.innerHTML = "";
 
-    Array.from(this.files).forEach(file => {
+    [...upload.files].forEach(file => {
         const reader = new FileReader();
+
         reader.onload = e => {
             const card = document.createElement("div");
             card.className = "card";
 
-            const overlayText = loveTexts[Math.floor(Math.random() * loveTexts.length)];
-            const story = coupleStories[Math.floor(Math.random() * coupleStories.length)];
+            const text = overlayTexts[Math.floor(Math.random() * overlayTexts.length)];
+            const story = stories[Math.floor(Math.random() * stories.length)];
 
             card.innerHTML = `
                 <img src="${e.target.result}">
-                <div class="overlay">
-                    <p>${overlayText}</p>
-                </div>
+                <div class="overlay"><p>${text}</p></div>
             `;
 
             card.onclick = () => {
@@ -249,6 +195,7 @@ uploadInput.addEventListener("change", function () {
 
             gallery.appendChild(card);
         };
+
         reader.readAsDataURL(file);
     });
 });
