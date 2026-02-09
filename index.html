@@ -202,10 +202,12 @@ uploadInput.addEventListener("change", function () {
             const randomText = loveTexts[Math.floor(Math.random() * loveTexts.length)];
 
             card.innerHTML = `
-                <img src="${e.target.result}">
-                <div class="overlay">
-                    <p>${randomText}</p>
-                </div>
+    <img src="${e.target.result}">
+    <div class="overlay">
+        <p>${randomText}</p>
+    </div>
+`;
+
             `;
             gallery.appendChild(card);
         };
