@@ -152,11 +152,11 @@ setInterval(() => {
 
 // Texts
 const overlayTexts = [
-    "You & Me ❤️",
-    "Forever Together 💕",
-    "My Favorite Place Is You",
-    "Love That Never Ends",
-    "Always & Forever"
+    "The moment our story began ❤️",
+    "Where two hearts chose forever 💕",
+    "A love that feels like home ✨",
+    "My Favorite Place Is You ❤️",
+    "Love That Never Ends ❤️",
 ];
 
 const stories = [
@@ -180,7 +180,7 @@ upload.addEventListener("change", () => {
             const card = document.createElement("div");
             card.className = "card";
 
-            const text = overlayTexts[index % overlayTexts.length];
+            const text = overlayTexts[index];
             const story = stories[index % stories.length];
 
             card.innerHTML = `
